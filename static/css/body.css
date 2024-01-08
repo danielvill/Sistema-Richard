@@ -1,0 +1,39 @@
+body {
+    background-color: #FFC0CB; /* Color de fondo rosa */
+  }
+  
+  .login-container {
+    width: 300px;
+    padding: 16px;
+    background-color: white; /* Color de fondo blanco para el formulario de login */
+    margin: 0 auto; /* Centrar el formulario de login */
+    margin-top: 100px; /* Espacio en la parte superior */
+    border-radius: 8px; /* Bordes redondeados */
+  }
+  
+  input[type=text], input[type=password] {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1; /* Color de fondo gris claro para los campos de entrada */
+  }
+  
+  button {
+    background-color: #FFC0CB; /* Color de fondo rosa para el botón */
+    color: black; /* Color de texto blanco para el botón */
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+  }
+  
+  button:hover {
+    opacity:1;
+  }
+  .imagen{
+      width: 300px;
+  }
