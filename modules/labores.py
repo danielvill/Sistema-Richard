@@ -1,11 +1,13 @@
 class Labores:
-    def __init__(self,usuario,descripcion):
-        self.usuario = usuario
+    def __init__(self,empleado,fecha,descripcion):
+        self.empleado = empleado
+        self.fecha = fecha
         self.descripcion = descripcion
         
     def laboDBCollection(self):
         return{
-            'usuario':self.usuario,
+            'empleado':self.empleado,
+            'fecha':self.fecha,
             'descripcion':self.descripcion
             
         }
