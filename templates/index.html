@@ -1,22 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="/static/css/body.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="/static/css/body.css">
 </head>
+
 <body>
+
+  <div class="login-container">
+    <form action="/index" method="POST">
+
     
-<div class="login-container">
     <img src="/static/img/tatis.jpeg" alt="" class="imagen">
     <label for="uname"><b>Nombre de usuario</b></label>
-    <input type="text" placeholder="Introduce tu nombre de usuario" name="uname" required>
-  
+    <input type="text" placeholder="Introduce tu nombre de usuario" name="user" required>
+
     <label for="psw"><b>Contraseña</b></label>
-    <input type="password" placeholder="Introduce tu contraseña" name="psw" required>
-  
+    <input type="password" placeholder="Introduce tu contraseña" name="clave" required>
     <button type="submit">Iniciar sesión</button>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="alert alert-danger" role="alert">
+      {{ messages[0] }}
+    </div>
+    {% endif %}
+    {% endwith %}
+  </form>
   </div>
 </body>
+
 </html>

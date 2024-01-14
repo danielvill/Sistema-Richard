@@ -4,28 +4,28 @@
         "password": "admin"
     },
     "usuario":{
+        "id":1,
         "usuario": "Maria",
-        "cedula": "54548785",
+        "cedula": 54548785,
+        "codigo":"Maria45",
         "correo": "marco@gmail.com",
         "password": "123"
     },
-    "asistencia":{
-       "usuario": "Maria",
-       "dias": "Lunes"
+    "asistencia": {
+        "empleado": "usuario",
+        "fecha":"12/05/2024",
+        "hora":"08:00 am",
+        "comentario":"llego tarde"
     },
-    "ventas":{
-         "usuario":"Maria",
-         "categoria":"Ropa de calle",
-         "cantidad":"10",
-         "venta":"100"
+    "ventas": {
+        "vendedor":"usuario",
+        "categoria":"Ropa de calle",
+        "cantidad":10,
+        "venta":100
     },
-
-    "labores":{
-        "usuario":"Maria",
+    "labores": {
+        "empleado":"usuario",
+        "fecha":"12/05/2024",
         "descripcion":"Limpiar la ropa"
-    },
-    "reporte":{
-        "usuario":"",
-        "venta":"100"
-    }
+    }   
 }

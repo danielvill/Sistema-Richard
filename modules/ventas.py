@@ -1,15 +1,16 @@
 class Ventas:
-    def __init__(self,usuario,cedula,correo,password):
-        self.usuario = usuario
-        self.cedula = cedula
-        self.correo = correo
-        self.password = password
-        
+    def __init__(self,vendedor,categoria, cantidad,fecha,venta):
+        self.vendedor = vendedor
+        self.categoria = categoria
+        self.cantidad = cantidad
+        self.fecha=fecha
+        self.venta = venta
+
     def ventDBCollection(self):
         return{
-            'usuario':self.usuario,
-            'cedula':self.cedula,
-            'correo':self.correo,
-            'password':self.password
-            
+            'vendedor':self.vendedor,
+            'categoria':self.categoria,
+            'cantidad':self.cantidad,
+            'fecha':self.fecha,
+            'venta':self.venta    
         }

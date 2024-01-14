@@ -1,5 +1,21 @@
 {% extends "admin/layout.html" %}
 
 {% block content %}
+<div class="container">
+    <h1>
+        {% for fecha in fechas %}
+        <div class="tatis">
+            <table class="table">
+                <tr>
+                    <th>{{ fecha }}</th>
+                </tr>
+                <tr>
+                    <td>Total: {{ sumas[fecha] }}</td>
+                </tr>
+            </table>
+        </div>
+        {% endfor %}
+    </h1>
+</div>
 
 {% endblock %}
