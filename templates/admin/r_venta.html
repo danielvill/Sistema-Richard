@@ -1,0 +1,27 @@
+{% extends "admin/layout.html" %}
+
+{% block content %}
+
+<div class="container">
+    <div class="tatis">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Ventas</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario, datos in usuarios_ordenados %}
+            <tr>
+                <td>{{ usuario }}</td>
+                <td>{{ datos['ventas'] }}</td>
+                <td>{{ datos['fecha'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>
+{% endblock %}

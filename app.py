@@ -6,14 +6,12 @@ from modules.usuario import Usuario
 from modules.ventas import Ventas
 from datetime import datetime
 from collections import defaultdict
+from babel.dates import format_date #pip install babel
 
 db = dbase()
 
 app = Flask(__name__)
 app.secret_key = 'modatatis'
-
-
-
 
 # ---- Ruta para Index Admin 
 @app.route('/',methods=['GET','POST'])
@@ -23,14 +21,14 @@ def principal():
 @app.route('/index',methods=['GET','POST'])
 def index():
     if request.method =='POST':
-        usuario = request.form['user']
-        contra = request.form['clave']
-        usuario_found = db.admin.find_one({'user':usuario,'clave':contra})
-        usuario_found2= db.usuario.find_one({'user':usuario,'clave':contra})#Este modulo es para el usuario para ingresar a la otra pagina 
+        usuari = request.form['usuario']
+        contra = request.form['password']
+        usuario_found = db.admin.find_one({'usuario':usuari,'password':contra})
+        usuario_found2= db.usuario.find_one({'usuario':usuari,'password':contra})#Este modulo es para el usuario para ingresar a la otra pagina 
         if usuario_found:
             return redirect(url_for('registrar'))
         elif usuario_found2:
-            return redirect(url_for('index'))
+            return redirect(url_for('u_usuario'))
         else:
             flash('Usuario o contraseña incorrectas')
             return redirect(url_for('index'))
@@ -213,8 +211,99 @@ def adve():
     return [usuario['usuario'] for usuario in usuarios]
 
 
-#Admin v
+#Admin Reporte de ventas
+@app.route('/admin/r_venta',methods=['GET','POST'])
+def reporventa():
+    # Obtener todas las ventas de la colección 'ventas'
+    ventas = db.ventas.find()
 
+    # Crear un diccionario para almacenar las ventas por usuario
+    ventas_por_usuario = {}
+
+    # Iterar sobre las ventas y sumar las cantidades por usuario
+    for venta in ventas:
+        usuario = venta['vendedor']
+        cantidad = float(venta['venta'])  # Convertir el valor de 'cambio' a float
+        fecha = venta['fecha']  # Obtener la fecha de la venta
+
+        # Convertir la fecha a formato español
+        fecha = datetime.strptime(fecha, "%Y-%m-%d")
+        fecha_es = format_date(fecha, 'MMMM yyyy', locale='es_ES')
+
+        # Verificar si el usuario ya está en el diccionario
+        if usuario in ventas_por_usuario:
+            ventas_por_usuario[usuario]['ventas'] += cantidad
+            ventas_por_usuario[usuario]['fecha'] = fecha_es
+        else:
+            ventas_por_usuario[usuario] = {'ventas': cantidad, 'fecha': fecha_es}
+
+    # Ordenar los usuarios por la cantidad de ventas en orden descendente
+    usuarios_ordenados = sorted(ventas_por_usuario.items(), key=lambda x: x[1]['ventas'], reverse=True)
+
+    # Renderizar la plantilla 'admin/r_venta.html' con los datos necesarios
+    return render_template('admin/r_venta.html', usuarios_ordenados=usuarios_ordenados)
+#Admin  Tareas 
+
+@app.route('/admin/tareas',methods=['GET','POST'])
+def tareas():
+    asistencia =db['asistencia'].find()
+    labores =db['labores'].find()
+    return render_template('admin/tareas.html',asistencia=asistencia,labores=labores)   
+
+
+#  ------------------- Carpeta Usuario ------------------------------------------------------------
+
+@app.route('/usuario/venta',methods=['GET','POST'])
+def u_usuario():
+    if request.method =='POST':
+        ventas = db["ventas"]
+        vendedor = request.form['vendedor']
+        categoria = request.form['categoria']
+        cantidad = request.form['cantidad']
+        fecha=request.form['fecha']
+        venta =request.form['venta']
+        if vendedor and categoria and cantidad and fecha and venta:
+            vent = Ventas(vendedor,categoria,cantidad,fecha,venta)
+            ventas.insert_one(vent.ventDBCollection())
+            flash('Guardado exitosamente')
+            return redirect(url_for('u_usuario'))
+        else:
+            flash('Llena todos los campos')
+    return render_template('usuario/venta.html',usuario=usve())
+
+def usve():
+    usuarios = db.usuario.find({}, {"usuario": 1})
+    return [usuario['usuario'] for usuario in usuarios]
+
+
+#Usuario Asistencia
+@app.route('/usuario/asistencia',methods=['GET','POST'])
+def u_asistencia():
+    if request.method =='POST':
+        asistencia = db["asistencia"]
+        empleado = request.form['empleado']
+        fecha = request.form['fecha']
+        horas = request.form['hora']
+        comentarios = request.form["comentario"]
+        if empleado and fecha and horas and comentarios:
+            asi = Asistencia(empleado,fecha,horas,comentarios)
+            asistencia.insert_one(asi.asisDBCollection())
+            flash('Guardado exitosamente')
+            return redirect(url_for('u_asistencia'))
+        else:
+            flash('Llena todos los campos')
+        
+    return render_template('usuario/asistencia.html',usuario=usasi())
+def usasi():
+    usuarios = db.usuario.find({}, {"usuario": 1})
+    return [usuario['usuario'] for usuario in usuarios]
+
+#Usuario Tareas
+@app.route('/usuario/v_tarea',methods=['GET','POST'])
+def u_tareas():
+    asistencia =db['asistencia'].find()
+    labores =db['labores'].find()
+    return render_template('usuario/v_tarea.html',asistencia=asistencia,labores=labores)   
 
 
 if __name__ == '__main__':

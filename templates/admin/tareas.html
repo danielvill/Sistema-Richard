@@ -1,0 +1,124 @@
+{% extends "admin/layout.html" %}
+{% block content %}
+<style>
+    .tarea {
+        width: 600px;
+        padding: 16px;
+        background-color: white;
+        /* Color de fondo blanco para el formulario de login */
+        margin: 0 auto;
+        /* Centrar el formulario de login */
+        margin-top: 100px;
+        /* Espacio en la parte superior */
+        border-radius: 8px;
+        /* Bordes redondeados */
+    }
+
+    input[type=text],
+    input[type=password],
+    input[type=date],
+    input[type=number],
+    input[type=email],
+    input[type=time],
+    select {
+        width: 120%;
+        padding: 8px;
+        margin: 5px 0 22px 0;
+        display: inline-block;
+        border: none;
+        background: #f1f1f1;
+        /* Color de fondo gris claro para los campos de entrada */
+    }
+</style>
+<div class="container">
+    <div class="tarea">
+        <h1 style="text-align: center;">Vista de Asistencia</h1>
+        <br>
+        <div id="contenedor" style="width: 500px; height: 500px; overflow: auto;">
+            {% for tarea in asistencia %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Empleado</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Comnetario</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>
+                            <input type="text" value="{{tarea.empleado}}">
+                        </th>
+                        <th>
+                            <input type="text" value="{{tarea.fecha}}">
+                        </th>
+                        <th>
+                            <input type="text" value="{{tarea.hora}}">
+                        </th>
+                        <th>
+                            <input type="text" value="{{tarea.comentario}}">
+                        </th>
+                    </tr>
+                </tbody>
+
+            </table>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="tarea">
+        <h1 style="text-align: center;">Vista de Labores</h1>
+        <br>
+        <div id="contenedor" style="width: 500px; height: 500px; overflow: auto;">
+            {% for tarea in labores %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Empleado</th>
+                        <th>Fecha</th>
+                        <th>Descripcion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>
+                            <input type="text" value="{{tarea.empleado}}">
+                        </th>
+                        <th>
+                            <input type="text" value="{{tarea.fecha}}">
+                        </th>
+                        <th>
+                            <input type="text" value="{{tarea.descripcion}}">
+                        </th>
+                    </tr>
+                </tbody>
+
+            </table>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+
+<script>
+    window.addEventListener('scroll', function () {
+        let contenedor = document.getElementById('contenedor');
+        let secciones = contenedor.getElementsByTagName('div');
+        let navegacion = document.getElementById('navegacion').getElementsByTagName('a');
+
+        for (let i = 0; i < secciones.length; i++) {
+            if (secciones[i].offsetTop <= contenedor.scrollTop) {
+                for (let j = 0; j < navegacion.length; j++) {
+                    navegacion[j].classList.remove('active');
+                }
+                navegacion[i].classList.add('active');
+            }
+        }
+    });
+
+</script>
+{% endblock %}

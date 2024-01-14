@@ -16,10 +16,10 @@
     
     <img src="/static/img/tatis.jpeg" alt="" class="imagen">
     <label for="uname"><b>Nombre de usuario</b></label>
-    <input type="text" placeholder="Introduce tu nombre de usuario" name="user" required>
+    <input type="text" placeholder="Introduce tu nombre de usuario" name="usuario" required>
 
     <label for="psw"><b>Contraseña</b></label>
-    <input type="password" placeholder="Introduce tu contraseña" name="clave" required>
+    <input type="password" placeholder="Introduce tu contraseña" name="password" required>
     <button type="submit">Iniciar sesión</button>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
