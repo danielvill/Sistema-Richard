@@ -13,12 +13,18 @@
                 <option value="{{ usuario }}">{{ usuario }}</option>
                 {% endfor %}
             </select>
-            <input type="date" name="fecha" placeholder="Fecha">
+            <input type="date" id="fecha" name="fecha" placeholder="Fecha">
             <br>
             <input type="time" name="hora">
             <br>
-            <input type="text" name="comentario" placeholder="comentario">
-            <button>Enviar</button>           
+            <select name="comentario" id="">
+                <option >Ingreso</option>
+                <option >Almuerzo</option>
+                <option >Salida</option>
+            </select>
+            <br>
+            <br>
+            <button >Enviar</button>           
         </form>
         <br>
         {% with messages = get_flashed_messages() %}
@@ -32,5 +38,22 @@
             {% endwith %}
     </div>
 </div>
+
+
+<script>
+    $(document).ready(function() {
+    $('select').select2();
+});
+// Obtener la fecha actual de la persona 
+var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //Enero es 0!
+    var yyyy = today.getFullYear();
+
+    today = yyyy + '-' + mm + '-' + dd;
+    document.getElementById("fecha").setAttribute("min", today);
+    document.getElementById("fecha").setAttribute("max", today);
+
+</script>
 
 {% endblock %}

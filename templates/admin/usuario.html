@@ -1,5 +1,4 @@
 {% extends "admin/layout.html" %}
-
 {% block content %}
 
 <div class="container">
@@ -12,7 +11,7 @@
             <br>
             <input type="text" name="usuario" placeholder="usuario">
             <br>
-            <input type="number" name="cedula" placeholder="cedula">
+            <input type="number" id="miInput" oninput="limitarEntrada()" name="cedula" placeholder="cedula">
             <br>
             <input type="email" name="correo" placeholder="correo">
             <br>
@@ -32,6 +31,20 @@
         {% endwith %}
     </div>
 </div>
-
+<script>
+    // Validación de la longitud de la cédula
+    document.getElementById('miInput').onchange = function () {
+        if (this.value.length !== 10) {
+            alert('Necesita 10 dígitos la cedula');
+            this.value = '';
+        }
+    }
+    function limitarEntrada() {
+        let x = document.getElementById("miInput");
+        if (x.value.length > 10) {
+            x.value = x.value.slice(0, 10);
+        }
+    }
+</script>
 
 {% endblock %}

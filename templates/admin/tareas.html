@@ -2,7 +2,7 @@
 {% block content %}
 <style>
     .tarea {
-        width: 600px;
+        width: 900px;
         padding: 16px;
         background-color: white;
         /* Color de fondo blanco para el formulario de login */
@@ -34,48 +34,43 @@
     <div class="tarea">
         <h1 style="text-align: center;">Vista de Asistencia</h1>
         <br>
-        <div id="contenedor" style="width: 500px; height: 500px; overflow: auto;">
-            {% for tarea in asistencia %}
-            <table class="table">
+        <div id="contenedor" style="width: 800px; height: 800px; overflow: auto;">
+
+            <table id="tablaAsistencia" class="table">
                 <thead>
                     <tr>
                         <th>Empleado</th>
                         <th>Fecha</th>
                         <th>Hora</th>
                         <th>Comnetario</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
+                    {% for tarea in asistencia %}
                     <tr>
-                        <th>
-                            <input type="text" value="{{tarea.empleado}}">
-                        </th>
-                        <th>
-                            <input type="text" value="{{tarea.fecha}}">
-                        </th>
-                        <th>
-                            <input type="text" value="{{tarea.hora}}">
-                        </th>
-                        <th>
-                            <input type="text" value="{{tarea.comentario}}">
-                        </th>
+                        <td>{{tarea.empleado}}</td>
+                        <td >{{tarea.fecha}}</td>
+                        <td>{{tarea.hora}}</td>
+                        <td>{{tarea.comentario}}</td>
+                        <td><button class="btn btn-primary">Editar</button>
+                            <a href="" class="btn btn-danger">Eliminar</a>
+                        </td>
                     </tr>
+                    {% endfor %}
                 </tbody>
-
             </table>
-            {% endfor %}
+
 
         </div>
     </div>
 </div>
-
 <div class="container">
     <div class="tarea">
         <h1 style="text-align: center;">Vista de Labores</h1>
         <br>
-        <div id="contenedor" style="width: 500px; height: 500px; overflow: auto;">
-            {% for tarea in labores %}
-            <table class="table">
+        <div id="contenedor" style="width: 800px; height: 800px; overflow: auto;">
+            <table id="tablaLabores" class="table">
                 <thead>
                     <tr>
                         <th>Empleado</th>
@@ -84,21 +79,21 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for tarea in labores %}
                     <tr>
-                        <th>
-                            <input type="text" value="{{tarea.empleado}}">
-                        </th>
-                        <th>
-                            <input type="text" value="{{tarea.fecha}}">
-                        </th>
-                        <th>
-                            <input type="text" value="{{tarea.descripcion}}">
-                        </th>
+                        <td>
+                            {{tarea.empleado}}
+                        </td>
+                        <td >
+                            {{tarea.fecha}}
+                        </td>
+                        <td>
+                            {{tarea.descripcion}}
+                        </td>
                     </tr>
+                    {% endfor %}
                 </tbody>
-
             </table>
-            {% endfor %}
 
         </div>
     </div>
@@ -119,6 +114,9 @@
             }
         }
     });
-
+    $(document).ready(function () {
+        $('#tablaAsistencia').DataTable();
+        $('#tablaLabores').DataTable();
+    });
 </script>
 {% endblock %}
