@@ -1,34 +1,43 @@
 {% extends "admin/layout.html" %}
 {% block content %}
-
 <div class="container">
-    <div class="tatis">
-        <form action="" method="POST">
-            <br>
-            <label for="uname"><b>Ingresado de Usuario</b></label>
-            <br>
-            <input type="number" name="id" placeholder="Identificador numerico">
-            <br>
-            <input type="text" name="usuario" placeholder="usuario">
-            <br>
-            <input type="number" id="miInput" oninput="limitarEntrada()" name="cedula" placeholder="cedula">
-            <br>
-            <input type="email" name="correo" placeholder="correo">
-            <br>
-            <input type="password" name="password" placeholder="contraseña">
-            <br>
-            <button class="">Enviar</button>
-        </form>
-        <br>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <div class="container">
-            {% for message in messages %}
-            <h5 style="background-color:#FFC0CB;">{{ message }}</h5>
-            {% endfor %}
+    <div class="row">
+        <div class="col align-self-center">
+            <img src="/static/img/nike.jpg" class="img-fluid">
         </div>
-        {% endif %}
-        {% endwith %}
+        <div class="col-sm">
+            <div class="tatis">
+                <form action="" method="POST">
+                    <br>
+                    <label for="uname"><b>Ingresado de Usuario</b></label>
+                    <br>
+                    <input type="number" name="id" placeholder="Identificador numerico">
+                    <br>
+                    <input type="text" name="usuario" placeholder="usuario">
+                    <br>
+                    <input type="number" id="miInput" oninput="limitarEntrada()" name="cedula" placeholder="cedula">
+                    <br>
+                    <input type="email" name="correo" placeholder="correo">
+                    <br>
+                    <input type="password" name="password" placeholder="contraseña">
+                    <br>
+                    <button class="">Enviar</button>
+                </form>
+                <br>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <div class="container">
+                    {% for message in messages %}
+                    <h5 style="background-color:#FFC0CB;">{{ message }}</h5>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+        <div class="col align-self-center">
+            <img src="/static/img/adidas.jpg" class="img-fluid">
+        </div>
     </div>
 </div>
 <script>
@@ -46,5 +55,4 @@
         }
     }
 </script>
-
 {% endblock %}

@@ -1,4 +1,4 @@
-from flask import flash, Flask, render_template, request,Response ,jsonify, redirect, url_for
+from flask import flash, Flask,session, render_template, request,Response ,jsonify, redirect, url_for
 from controllers.datab import dbConnection as dbase
 from modules.asistencia import Asistencia
 from modules.labores import Labores
@@ -26,8 +26,10 @@ def index():
         usuario_found = db.admin.find_one({'usuario':usuari,'password':contra})
         usuario_found2= db.usuario.find_one({'usuario':usuari,'password':contra})#Este modulo es para el usuario para ingresar a la otra pagina 
         if usuario_found:
+            session['usuario'] = usuari #*Se tiene que importar session para manejar las sesiones de los usuarios
             return redirect(url_for('registrar'))
         elif usuario_found2:
+            session['usuario'] = usuari
             return redirect(url_for('u_usuario'))
         else:
             flash('Usuario o contraseña incorrectas')
@@ -242,6 +244,7 @@ def reporventa():
 
     # Renderizar la plantilla 'admin/r_venta.html' con los datos necesarios
     return render_template('admin/r_venta.html', usuarios_ordenados=usuarios_ordenados)
+
 #Admin  Tareas 
 
 @app.route('/admin/tareas',methods=['GET','POST'])
@@ -251,25 +254,82 @@ def tareas():
     return render_template('admin/tareas.html',asistencia=asistencia,labores=labores)   
 
 
+#Admin  vista y elimincacion y editacion de labores 
+
+@app.route('/admin/vi_labores',methods=['GET','POST'])
+def vi_labores():
+    labores = db['labores'].find()
+    return render_template('admin/vi_labores.html',labores=labores)
+    
+@app.route('/edit_la/<string:lab_name>',methods=['GET','POST'])
+def edilab(lab_name):
+    labores = db['labores']
+    empleado = request.form["empleado"]
+    fecha = request.form['fecha']
+    descripcion = request.form["descripcion"]
+
+    if empleado and fecha and descripcion:
+        labores.update_one({'empleado':lab_name},{'$set':{'empleado':empleado,'fecha':fecha,'descripcion':descripcion}})
+        return redirect(url_for("vi_labores"))
+    return render_template("admin/vi_labores.html")
+
+@app.route('/delete_lab/<string:lab_name>', methods=['GET','POST'])
+def elilab(lab_name):
+    labores =db['labores']
+    labores.delete_one({'empleado':lab_name})
+    return redirect(url_for('vi_labores'))
+
+
+#Admin editar asistencia  
+@app.route('/admin/vis_asistencia',methods=['GET','POST'])
+def r_asistencia():
+    asistencia = db['asistencia'].find()
+    return render_template('admin/vis_asistencia.html',asistencia=asistencia)
+
+@app.route('/edit_asi/<string:asi_name>',methods=['GET','POST'])
+def ediasi(asi_name):
+    asistencia = db['asistencia']
+    empleado = request.form["empleado"]
+    fecha = request.form['fecha']
+    hora = request.form["hora"]
+    comentarios = request.form["comentario"]
+    if empleado and fecha and hora and comentarios:
+        asistencia.update_one({'empleado':asi_name},{'$set':{'empleado':empleado,'fecha':fecha,'hora':hora,'comentario':comentarios}})
+        return redirect(url_for("r_asistencia"))
+
+
+@app.route('/delete_asi/<string:asi_name>', methods=['GET','POST'])
+def eliasi(asi_name):
+    asi =db['asistencia']
+    asi.delete_one({'empleado':asi_name})
+    return redirect(url_for('r_asistencia'))
+
+
+
+
+
 #  ------------------- Carpeta Usuario ------------------------------------------------------------
 
 @app.route('/usuario/venta',methods=['GET','POST'])
 def u_usuario():
-    if request.method =='POST':
-        ventas = db["ventas"]
-        vendedor = request.form['vendedor']
-        categoria = request.form['categoria']
-        cantidad = request.form['cantidad']
-        fecha=request.form['fecha']
-        venta =request.form['venta']
-        if vendedor and categoria and cantidad and fecha and venta:
-            vent = Ventas(vendedor,categoria,cantidad,fecha,venta)
-            ventas.insert_one(vent.ventDBCollection())
-            flash('Guardado exitosamente')
-            return redirect(url_for('u_usuario'))
-        else:
-            flash('Llena todos los campos')
-    return render_template('usuario/venta.html',usuario=usve())
+    if 'usuario' in session:
+        if request.method =='POST':
+            ventas = db["ventas"]
+            vendedor = request.form['usuario']
+            categoria = request.form['categoria']
+            cantidad = request.form['cantidad']
+            fecha=request.form['fecha']
+            venta =request.form['venta']
+            if vendedor and categoria and cantidad and fecha and venta:
+                vent = Ventas(vendedor,categoria,cantidad,fecha,venta)
+                ventas.insert_one(vent.ventDBCollection())
+                flash('Guardado exitosamente')
+                return redirect(url_for('u_usuario'))
+            else:
+                flash('Llena todos los campos')
+        return render_template('usuario/venta.html', usuario=session['usuario'])    
+    else:
+        return render_template('usuario/venta.html',usuario=usve())
 
 def usve():
     usuarios = db.usuario.find({}, {"usuario": 1})
@@ -277,26 +337,25 @@ def usve():
 
 
 #Usuario Asistencia
-@app.route('/usuario/asistencia',methods=['GET','POST'])
+@app.route('/usuario/asistencia', methods=['GET', 'POST'])
 def u_asistencia():
-    if request.method =='POST':
-        asistencia = db["asistencia"]
-        empleado = request.form['empleado']
-        fecha = request.form['fecha']
-        horas = request.form['hora']
-        comentarios = request.form["comentario"]
-        if empleado and fecha and horas and comentarios:
-            asi = Asistencia(empleado,fecha,horas,comentarios)
-            asistencia.insert_one(asi.asisDBCollection())
-            flash('Guardado exitosamente')
-            return redirect(url_for('u_asistencia'))
-        else:
-            flash('Llena todos los campos')
-        
-    return render_template('usuario/asistencia.html',usuario=usasi())
-def usasi():
-    usuarios = db.usuario.find({}, {"usuario": 1})
-    return [usuario['usuario'] for usuario in usuarios]
+    if 'usuario' in session:
+        if request.method == 'POST':
+            asistencia = db["asistencia"]
+            empleado = session['usuario']
+            fecha = request.form['fecha']
+            horas = request.form['hora']
+            comentarios = request.form["comentario"]
+            if empleado and fecha and horas and comentarios:
+                asi = Asistencia(empleado, fecha, horas, comentarios)
+                asistencia.insert_one(asi.asisDBCollection())
+                flash('Guardado exitosamente')
+                return redirect(url_for('u_asistencia'))
+            else:
+                flash('Llena todos los campos')
+        return render_template('usuario/asistencia.html', usuario=session['usuario'])
+    else:
+        return redirect(url_for('index'))
 
 #Usuario Tareas
 @app.route('/usuario/v_tarea',methods=['GET','POST'])

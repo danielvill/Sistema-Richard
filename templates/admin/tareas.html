@@ -43,7 +43,6 @@
                         <th>Fecha</th>
                         <th>Hora</th>
                         <th>Comnetario</th>
-                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -53,9 +52,6 @@
                         <td >{{tarea.fecha}}</td>
                         <td>{{tarea.hora}}</td>
                         <td>{{tarea.comentario}}</td>
-                        <td><button class="btn btn-primary">Editar</button>
-                            <a href="" class="btn btn-danger">Eliminar</a>
-                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -115,8 +111,17 @@
         }
     });
     $(document).ready(function () {
-        $('#tablaAsistencia').DataTable();
-        $('#tablaLabores').DataTable();
+        $('#tablaAsistencia').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+            }
+        });
+        $('#tablaLabores').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+            }
+        });
     });
+    
 </script>
 {% endblock %}

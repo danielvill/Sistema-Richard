@@ -2,20 +2,33 @@
 
 {% block content %}
 <div class="container">
-    <h1>
-        {% for fecha in fechas %}
-        <div class="tatis">
-            <table class="table">
+    <div class="tarea">
+        <table id="example" class="display" style="width:100%">
+            <thead>
                 <tr>
-                    <th>{{ fecha }}</th>
+                    <th>Fecha</th>
+                    <th>Valor</th>
                 </tr>
+            </thead>
+            <tbody>
+                {% for fecha in fechas %}
                 <tr>
+                    <td>{{ fecha }}</td>
                     <td>Total: {{ sumas[fecha] }}</td>
                 </tr>
-            </table>
-        </div>
-        {% endfor %}
-    </h1>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
-
+<script>
+    //Cambio de english a spanish
+    $(document).ready(function () {
+        $('#example').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+            }
+        });
+    });
+</script>
 {% endblock %}

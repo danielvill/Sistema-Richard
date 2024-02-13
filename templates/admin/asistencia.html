@@ -3,57 +3,55 @@
 {% block content %}
 
 <div class="container">
-    <div class="tatis">
-        <form action="/admin/asistencia" method="POST">
-            <br>
-            <label for="uname"><b>Ingresado de Asistencia</b></label>
-            <br>
-            <select name="empleado">
-                {% for usuario in usuario %}
-                <option value="{{ usuario }}">{{ usuario }}</option>
-                {% endfor %}
-            </select>
-            <input type="date" id="fecha" name="fecha" placeholder="Fecha">
-            <br>
-            <input type="time" name="hora">
-            <br>
-            <select name="comentario" id="">
-                <option >Ingreso</option>
-                <option >Almuerzo</option>
-                <option >Salida</option>
-            </select>
-            <br>
-            <br>
-            <button >Enviar</button>           
-        </form>
-        <br>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <div class="container">
-                {% for message in messages %}
-                <h5 style="background-color:#FFC0CB;">{{ message }}</h5>
-                {% endfor %}
+    <div class="row">
+        <div class="col align-self-center">
+            <img src="/static/img/nike.jpg" class="img-fluid">
+        </div>
+        <div class="col-sm">
+            <div class="tatis">
+                <form action="/admin/asistencia" method="POST">
+                    <br>
+                    <label for="uname"><b>Ingresado de Asistencia</b></label>
+                    <br>
+                    <select name="empleado">
+                        {% for usuario in usuario %}
+                        <option value="{{ usuario }}">{{ usuario }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="date"  name="fecha" placeholder="Fecha">
+                    <br>
+                    <input type="time" name="hora">
+                    <br>
+                    <select name="comentario" id="">
+                        <option>Ingreso</option>
+                        <option>Almuerzo</option>
+                        <option>Salida</option>
+                    </select>
+                    <br>
+                    <br>
+                    <button>Enviar</button>
+                </form>
+                <br>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <div class="container">
+                    {% for message in messages %}
+                    <h5 style="background-color:#FFC0CB;">{{ message }}</h5>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
             </div>
-            {% endif %}
-            {% endwith %}
+        </div>
+        <div class="col align-self-center">
+            <img src="/static/img/adidas.jpg" class="img-fluid">
+        </div>
     </div>
 </div>
-
-
 <script>
-    $(document).ready(function() {
-    $('select').select2();
-});
-// Obtener la fecha actual de la persona 
-var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0'); //Enero es 0!
-    var yyyy = today.getFullYear();
-
-    today = yyyy + '-' + mm + '-' + dd;
-    document.getElementById("fecha").setAttribute("min", today);
-    document.getElementById("fecha").setAttribute("max", today);
-
+    $(document).ready(function () {
+        $('select').select2();
+    });
 </script>
 
 {% endblock %}

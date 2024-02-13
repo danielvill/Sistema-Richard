@@ -2,41 +2,51 @@
 
 {% block content %}
 <div class="container">
-    <div class="tatis">
-        <form action="/admin/labores" method="post">
-            <br>
-            <label for="uname"><b>Ingresado de Labores</b></label>
-            <br>
-            <select id="usuario-select" name="empleado">
-                {% for usuario in usuario %}
-                <option value="{{ usuario }}">{{ usuario }}</option>
-                {% endfor %}
-            </select>
-            <br>
-            <input type="date" name="fecha">
-            <br>
-            <input type="text" name="descripcion" placeholder="Descripcion">
-            <br>
-            <br>
-            <button>Enviar</button>
-        </form>
-        <br>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <div class="container">
-            {% for message in messages %}
-            <h5 style="background-color:#FFC0CB;">{{ message }}</h5>
-            {% endfor %}
+    <div class="row align-items-center">
+        <div class="col">
+            <img src="/static/img/nike.jpg" class="img-fluid">
         </div>
-        {% endif %}
-        {% endwith %}
+        <div class="col">
+            <div class="tatis">
+                <form action="/admin/labores" method="post">
+                    <br>
+                    <label for="uname"><b>Ingresado de Labores</b></label>
+                    <br>
+                    <select id="usuario-select" name="empleado">
+                        {% for usuario in usuario %}
+                        <option value="{{ usuario }}">{{ usuario }}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    <input type="date" name="fecha">
+                    <br>
+                    <input type="text" name="descripcion" placeholder="Descripcion">
+                    <br>
+                    <br>
+                    <button>Enviar</button>
+                </form>
+                <br>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <div class="container">
+                    {% for message in messages %}
+                    <h5 style="background-color:#FFC0CB;">{{ message }}</h5>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+        <div class="col">
+            <img src="/static/img/adidas.jpg" class="img-fluid">
+        </div>
     </div>
 </div>
 
 <script>
-    $(document).ready(function() {
-    $('select').select2();
-});
+    $(document).ready(function () {
+        $('select').select2();
+    });
 </script>
 
 

@@ -2,7 +2,7 @@
 {% block content %}
 <style>
     .tarea {
-        width: 600px;
+        width: 800px;
         padding: 16px;
         background-color: white;
         /* Color de fondo blanco para el formulario de login */
@@ -36,9 +36,8 @@
     <div class="tarea">
         <h1 style="text-align: center;">Vista de Labores</h1>
         <br>
-        <div id="contenedor" style="width: 500px; height: 500px; overflow: auto;">
-            {% for u_tareas in labores %}
-            <table class="table">
+        <div id="contenedor" style="width: 700px; height: 700px; overflow: auto;">     
+            <table id="tablaLabores" class="table">
                 <thead>
                     <tr>
                         <th>Empleado</th>
@@ -47,21 +46,22 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for u_tareas in labores %}
                     <tr>
                         <th>
-                            <input type="text" value="{{u_tareas.empleado}}">
+                            {{u_tareas.empleado}}
                         </th>
                         <th>
-                            <input type="text" value="{{u_tareas.fecha}}">
+                            {{u_tareas.fecha}}
                         </th>
                         <th>
-                            <input type="text" value="{{u_tareas.descripcion}}">
+                            {{u_tareas.descripcion}}
                         </th>
                     </tr>
+                    {% endfor %}
                 </tbody>
-
             </table>
-            {% endfor %}
+            
 
         </div>
     </div>
@@ -81,6 +81,18 @@
                 navegacion[i].classList.add('active');
             }
         }
+    });
+    $(document).ready(function () {
+        $('#tablaAsistencia').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+            }
+        });
+        $('#tablaLabores').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+            }
+        });
     });
 
 </script>
