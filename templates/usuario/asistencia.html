@@ -8,10 +8,10 @@
             <br>
             <label for="uname"><b>Ingresado de Asistencia</b></label>
             <br>
-            <input type="text" name="empleado" value="{{ usuario }}">
+            <input type="text" name="empleado" value="{{ usuario }}" readonly>
             <input type="date" id="fecha" name="fecha" placeholder="Fecha">
             <br>
-            <input type="time" id="hora" name="hora">
+            <input type="text" id="hora" name="hora">
             <br>
             <select name="comentario" id="">
                 <option >Ingreso</option>
@@ -36,44 +36,7 @@
 </div>
 
 
-<script>
-    $(document).ready(function() {
-    $('select').select2();
-});
-// Obtener la fecha actual de la persona 
-let today = new Date();
-    let dd = String(today.getDate()).padStart(2, '0');
-    let mm = String(today.getMonth() + 1).padStart(2, '0'); //Enero es 0!
-    let yyyy = today.getFullYear();
-
-    today = yyyy + '-' + mm + '-' + dd;
-    document.getElementById("fecha").setAttribute("min", today);
-    document.getElementById("fecha").setAttribute("max", today);
-
-    document.getElementById('hora').addEventListener('change', function() {
-    var hora = this.value;
-    var horarioLaboral = ['08:00', '12:00', '14:00', '18:00'];
-
-    if (horarioLaboral.includes(hora)) {
-        console.log('Hora laborable');
-    } else {
-        alert('Esa no es una hora laborable solo se acepta este formato de hora 08:00 a.m ,12:00 a.m ,02:00 p.m,06:00 p.m' );
-        this.value = '';  // Borra el valor del campo de entrada
-    }
-});
-
-// Función para convertir el formato de 24 horas a 12 horas (AM/PM)
-function convertirFormatoHora(hora24) {
-    var [hora, minutos] = hora24.split(':');
-    var ampm = +hora < 12 ? 'a.m.' : 'p.m.';
-    hora = hora % 12 || 12;
-    return `${hora}:${minutos} ${ampm}`;
-}
-
-// Ejemplo de uso de la función
-console.log(convertirFormatoHora('08:00'));  // Imprime "8:00 a.m."
-
-
+<script src="/static/js/user/asistencia.js">
 </script>
 
 {% endblock %}

@@ -1,0 +1,104 @@
+{% extends "admin/layout.html" %}
+{% block content %}
+<div class="container">
+    <br>
+    <div class="input-group flex-nowrap">
+        <span class="input-group-text" id="addon-wrapping">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
+                viewBox="0 0 16 16">
+                <path
+                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+            </svg>
+        </span>
+        <input type="search" id="filtro" class="form-control" placeholder="Busqueda" aria-label="Username"
+            aria-describedby="addon-wrapping">
+    </div>
+    {% for venta in ventas %}
+    <form action="/edit_venta/{{venta.vendedor}}" method="POST">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Vendedor
+                </th>
+                <th>
+                    Categoria
+                </th>
+                <th>
+                    Cantidad
+                </th>
+                <th>
+                    Fecha
+                </th>
+                <th>
+                    Venta
+                </th>
+                <th>
+                    Acciones
+                </th>
+            </tr>
+        </thead>
+        <tbody data-vendedor="{{venta.vendedor}}">
+
+            <th>
+                <input type="text" class="form-control" value="{{venta.vendedor}}" name="vendedor">
+            </th>
+            <th>
+                <input type="text" class="form-control" value="{{venta.categoria}}" name="categoria">
+            </th>
+            <th>
+                <input type="text" class="form-control" value="{{venta.cantidad}}" name="cantidad">
+            </th>
+            <th>
+                <input type="date" class="form-control" value="{{venta.fecha}}" name="fecha">
+            </th>
+            <th>
+                <input type="number" step="00.01" class="form-control" value="{{venta.venta}}" name="venta">
+            </th>
+            <th>
+                <button class="editar" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                    fill="currentColor" class="editar bi bi-pencil-square" viewBox="0 0 16 16">
+                    <path
+                      d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                    <path fill-rule="evenodd"
+                      d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                  </svg></button>
+                  <a class="eliminar" href="{{url_for('eliven',ven_name=venta.vendedor)}}"><svg
+                    xmlns="http://www.w3.org/2000/svg" width="" height="16" fill="currentColor" class="bi bi-trash-fill"
+                    viewBox="0 0 16 16">
+                    <path
+                      d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+                  </svg>
+                </a>
+            </th>
+        </tbody>
+    </table>
+    </form>
+    {% endfor %}
+</div>
+<script>
+    $(document).ready(function () {
+        $("#filtro").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("tbody[data-vendedor]").filter(function () {
+                $(this).parent().toggle($(this).data("vendedor").toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+    //  Este es oara preguntar de la edicion y eliminacion
+    $(document).ready(function () {
+        $(".editar").click(function (event) {
+            if (!confirm("¿Estás seguro de que quieres editar?")) {
+                event.preventDefault();
+            }
+        });
+
+        $(".eliminar").click(function (event) {
+            if (!confirm("¿Estás seguro de que quieres eliminar?")) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
+
+{% endblock %}

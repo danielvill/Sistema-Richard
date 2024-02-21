@@ -11,13 +11,13 @@
                     <br>
                     <label for="uname"><b>Ingresado de Usuario</b></label>
                     <br>
-                    <input type="number" name="id" placeholder="Identificador numerico">
+                    <input type="number" id="codigo" name="id" readonly>
                     <br>
                     <input type="text" name="usuario" placeholder="usuario">
                     <br>
                     <input type="number" id="miInput" oninput="limitarEntrada()" name="cedula" placeholder="cedula">
                     <br>
-                    <input type="email" name="correo" placeholder="correo">
+                    <input type="email" id="correo" name="correo" placeholder="correo">
                     <br>
                     <input type="password" name="password" placeholder="contraseña">
                     <br>
@@ -40,19 +40,5 @@
         </div>
     </div>
 </div>
-<script>
-    // Validación de la longitud de la cédula
-    document.getElementById('miInput').onchange = function () {
-        if (this.value.length !== 10) {
-            alert('Necesita 10 dígitos la cedula');
-            this.value = '';
-        }
-    }
-    function limitarEntrada() {
-        let x = document.getElementById("miInput");
-        if (x.value.length > 10) {
-            x.value = x.value.slice(0, 10);
-        }
-    }
-</script>
+<script src="/static/js/admin/usuario.js"></script>
 {% endblock %}

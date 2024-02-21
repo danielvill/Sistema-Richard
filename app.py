@@ -4,7 +4,7 @@ from modules.asistencia import Asistencia
 from modules.labores import Labores
 from modules.usuario import Usuario
 from modules.ventas import Ventas
-from datetime import datetime
+from datetime import datetime, timedelta
 from collections import defaultdict
 from babel.dates import format_date #pip install babel
 
@@ -213,6 +213,36 @@ def adve():
     return [usuario['usuario'] for usuario in usuarios]
 
 
+#Admin Editar ventas
+@app.route('/admin/e_ventas',methods=['GET','POST'])
+def e_ventas():
+    ventas =db['ventas'].find()
+    return render_template('admin/e_ventas.html',ventas=ventas)   
+
+#Admin Editar venta 
+@app.route('/edit_venta/<string:ven_name>',methods=['GET','POST'])
+def ediven(ven_name):
+    vendedor = db['ventas']
+    usuarios=request.form["vendedor"]
+    categoria=request.form["categoria"]
+    cantidad=request.form["cantidad"]
+    fecha=request.form["fecha"]
+    venta=request.form["venta"]
+
+    if usuarios and categoria and cantidad and fecha and venta:
+        vendedor.update_one({'vendedor':ven_name},{'$set':{'usuario':usuarios,'categoria':categoria,'fecha':fecha,'venta':venta}})
+        return redirect(url_for("e_ventas"))  
+    return render_template('admin/e_ventas.html')
+
+#Admin Eliminar Venta
+@app.route('/delete_venta/<string:ven_name>', methods=['GET','POST'])
+def eliven(ven_name):
+    vendedor =db['ventas']
+    vendedor.delete_one({'vendedor':ven_name})
+    return redirect(url_for('e_ventas'))
+
+
+
 #Admin Reporte de ventas
 @app.route('/admin/r_venta',methods=['GET','POST'])
 def reporventa():
@@ -244,6 +274,82 @@ def reporventa():
 
     # Renderizar la plantilla 'admin/r_venta.html' con los datos necesarios
     return render_template('admin/r_venta.html', usuarios_ordenados=usuarios_ordenados)
+
+#Admin reporte diario de ventas
+@app.route('/admin/r_diario')
+def repodia(): 
+
+        # Obtener todas las ventas de la colección 'ventas'
+        ventas = db.ventas.find()
+        
+        # Crear un diccionario para almacenar las ventas por usuario
+        ventas_por_usuario = {}
+        
+        # Iterar sobre las ventas y sumar las cantidades por usuario
+        for venta in ventas:
+            usuario = venta['vendedor']
+            cantidad = float(venta['venta'])
+            fecha = venta ["fecha"]  
+        
+            # Convertir la fecha a formato español
+            fecha = datetime.strptime(fecha, "%Y-%m-%d")
+            fecha_es = format_date(fecha, 'EEEE d MMMM yyyy', locale='es_ES')
+        
+            # Verificar si el usuario ya está en el diccionario
+            if usuario in ventas_por_usuario:
+                # Verificar si la fecha ya está en el diccionario del usuario
+                if fecha_es in ventas_por_usuario[usuario]:
+                    ventas_por_usuario[usuario][fecha_es] += cantidad
+                else:
+                    ventas_por_usuario[usuario][fecha_es] = cantidad
+            else:
+                ventas_por_usuario[usuario] = {fecha_es: cantidad}
+        
+        # Ordenar los usuarios por la cantidad de ventas en orden descendente
+        usuarios_ordenados = sorted(ventas_por_usuario.items(), key=lambda x: sum(x[1].values()), reverse=True)
+
+        # Renderizar la plantilla 'admin/r_diario.html' con los datos necesarios
+        return render_template('admin/r_diario.html', usuarios_ordenados=usuarios_ordenados)
+
+
+# Admin Ventas semanales 
+@app.route('/admin/r_semanal')
+def reposemana(): 
+
+    # Obtener todas las ventas de la colección 'ventas'
+    ventas = db.ventas.find()
+    
+    # Crear un diccionario para almacenar las ventas por usuario
+    ventas_por_usuario = {}
+    
+    # Iterar sobre las ventas y sumar las cantidades por usuario
+    for venta in ventas:
+        usuario = venta['vendedor']
+        cantidad = float(venta['venta'])
+        fecha = venta["fecha"]  
+        
+        # Convertir la fecha a formato español
+        fecha = datetime.strptime(fecha, "%Y-%m-%d")
+        
+        # Calcular el inicio de la semana para la fecha
+        inicio_semana = fecha - timedelta(days=fecha.weekday())
+        inicio_semana_es = format_date(inicio_semana, 'EEEE d MMMM yyyy', locale='es_ES')
+        
+        # Verificar si el usuario ya está en el diccionario
+        if usuario in ventas_por_usuario:
+            # Verificar si la semana ya está en el diccionario del usuario
+            if inicio_semana_es in ventas_por_usuario[usuario]:
+                ventas_por_usuario[usuario][inicio_semana_es] += cantidad
+            else:
+                ventas_por_usuario[usuario][inicio_semana_es] = cantidad
+        else:
+            ventas_por_usuario[usuario] = {inicio_semana_es: cantidad}
+    
+    # Ordenar los usuarios por la cantidad de ventas en orden descendente
+    usuarios_ordenados = sorted(ventas_por_usuario.items(), key=lambda x: sum(x[1].values()), reverse=True)
+
+    # Renderizar la plantilla 'admin/r_semanal.html' con los datos necesarios
+    return render_template('admin/r_semanal.html', usuarios_ordenados=usuarios_ordenados)
 
 #Admin  Tareas 
 
@@ -315,7 +421,7 @@ def u_usuario():
     if 'usuario' in session:
         if request.method =='POST':
             ventas = db["ventas"]
-            vendedor = request.form['usuario']
+            vendedor = request.form['vendedor']
             categoria = request.form['categoria']
             cantidad = request.form['cantidad']
             fecha=request.form['fecha']
@@ -342,7 +448,7 @@ def u_asistencia():
     if 'usuario' in session:
         if request.method == 'POST':
             asistencia = db["asistencia"]
-            empleado = session['usuario']
+            empleado = request.form['empleado']
             fecha = request.form['fecha']
             horas = request.form['hora']
             comentarios = request.form["comentario"]

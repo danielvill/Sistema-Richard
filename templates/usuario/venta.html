@@ -8,7 +8,7 @@
             <br>
             <label for="uname"><b>Ingresado de Ventas</b></label>
             <br>
-            <input type="text" name="vendedor" value="{{ usuario }}">
+            <input type="text" name="vendedor" value="{{ usuario }}" readonly>
             <br>
             <input type="text" name="categoria" placeholder="categoria">
             <br>
@@ -16,7 +16,7 @@
             <br>
             <input type="date" name="fecha" id="fecha">
             <br>
-            <input type="number" name="venta" placeholder="venta">
+            <input type="number" step="00.01" name="venta" placeholder="Valor total de la venta">
             <br>
             <button type="submit" >Enviar</button>
         </form>

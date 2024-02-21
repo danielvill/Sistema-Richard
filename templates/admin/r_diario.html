@@ -1,0 +1,41 @@
+{% extends "admin/layout.html" %}
+{% block content %}
+<div class="container">
+    <h1 style="text-align: center;">Ventas Diario</h1>
+    <br>
+    <table id="example" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Vendedor</th>
+                <th>Fecha</th>
+                <th>Ventas</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario, ventas in usuarios_ordenados %}
+            {% for fecha, cantidad in ventas.items() %}
+            <tr>
+                <td>{{ usuario }}</td>
+                <td>{{ fecha }}</td>
+                <td>{{ cantidad }}</td>
+            </tr>
+            {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script>
+
+    //Cambio de english a spanish
+    $(document).ready(function () {
+        $('#example').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+            }
+        });
+    });
+</script>
+
+
+
+{% endblock %}
