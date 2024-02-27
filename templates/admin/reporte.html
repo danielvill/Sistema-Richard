@@ -1,5 +1,4 @@
 {% extends "admin/layout.html" %}
-
 {% block content %}
 <div class="container">
     <div class="tarea">
@@ -21,6 +20,8 @@
         </table>
     </div>
 </div>
+<canvas id="myBarChart"></canvas>
+
 <script>
     //Cambio de english a spanish
     $(document).ready(function () {
@@ -30,5 +31,40 @@
             }
         });
     });
+
+     // Datos de ejemplo (reemplázalos con tus propios datos)
+    const fechas = [{% for fecha in fechas %}"{{ fecha }}", {% endfor %}];
+        const sumas = {
+            {% for fecha in fechas %}
+                "{{ fecha }}": {{ sumas[fecha] }},
+            {% endfor %}
+        };
+
+        // Configuración del gráfico
+        const config = {
+            type: 'bar',
+            data: {
+                labels: fechas,
+                datasets: [{
+                    label: 'Total',
+                    data: fechas.map(fecha => sumas[fecha]),
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)', // Color de las barras
+                    borderColor: 'rgba(75, 192, 192, 1)', // Color del borde de las barras
+                    borderWidth: 1 // Grosor del borde
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+
+        // Crear el gráfico
+        const ctx = document.getElementById('myBarChart').getContext('2d');
+        new Chart(ctx, config);
+
 </script>
 {% endblock %}

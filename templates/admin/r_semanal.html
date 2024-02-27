@@ -17,13 +17,14 @@
             <tr>
                 <td>{{ usuario }}</td>
                 <td>{{ semana }}</td>
-                <td>{{ cantidad }}</td>
+                <td >{{ cantidad }}</td>
             </tr>
             {% endfor %}
             {% endfor %}
         </tbody>
     </table>
 </div>
+<canvas id="myBarChart"></canvas>
 <script>
 
     //Cambio de english a spanish
@@ -34,6 +35,43 @@
             }
         });
     });
+
+    // Datos de ejemplo (reemplázalos con tus propios datos)
+    const usuarios = [{% for usuario, ventas in usuarios_ordenados %}"{{ usuario }}", {% endfor %}];
+        const semanas = [{% for usuario, ventas in usuarios_ordenados %}{% for semana, cantidad in ventas.items() %}"{{ semana }}", {% endfor %}{% endfor %}];
+        const cantidades = {
+            {% for usuario, ventas in usuarios_ordenados %}
+                {% for semana, cantidad in ventas.items() %}
+                    "{{ usuario }}-{{ semana }}": {{ cantidad }},
+                {% endfor %}
+            {% endfor %}
+        };
+
+        // Configuración del gráfico
+        const config = {
+            type: 'bar',
+            data: {
+                labels: semanas,
+                datasets: usuarios.map(usuario => ({
+                    label: usuario,
+                    data: semanas.map(semana => cantidades[`${usuario}-${semana}`]),
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)', // Color de las barras
+                    borderColor: 'rgba(75, 192, 192, 1)', // Color del borde de las barras
+                    borderWidth: 1 // Grosor del borde
+                }))
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+
+        // Crear el gráfico
+        const ctx = document.getElementById('myBarChart').getContext('2d');
+        new Chart(ctx, config);
 </script>
 
 

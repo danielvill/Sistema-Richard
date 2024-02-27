@@ -48,8 +48,4 @@ function validarcorreo() {
         }
     }
 
-    // Ingresado de codigos aleatorios 
-
-    var codigo = document.getElementById('codigo');
-    var numeroAleatorio = Math.floor(10 + Math.random() * 90);
-    codigo.value = numeroAleatorio;
+    

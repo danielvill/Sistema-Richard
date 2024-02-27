@@ -43,13 +43,12 @@ def index():
 def registrar():
     if request.method =='POST':
         registro = db["usuario"]
-        id_usuario = request.form['id']
         usuari = request.form['usuario']
         cedula = request.form['cedula']
         correo = request.form['correo']
         password = request.form['password']
-        if id_usuario and usuari and cedula and correo and password:
-            regis = Usuario(id_usuario,usuari,cedula,correo,password)
+        if usuari and cedula and correo and password:
+            regis = Usuario(usuari,cedula,correo,password)
             registro.insert_one(regis.usuDBCollection())
             flash('Guardado en la base de datos')
             return redirect(url_for('registrar'))
@@ -230,7 +229,7 @@ def ediven(ven_name):
     venta=request.form["venta"]
 
     if usuarios and categoria and cantidad and fecha and venta:
-        vendedor.update_one({'vendedor':ven_name},{'$set':{'usuario':usuarios,'categoria':categoria,'fecha':fecha,'venta':venta}})
+        vendedor.update_one({'vendedor':ven_name},{'$set':{'usuario':usuarios,'categoria':categoria,'cantidad':cantidad,'fecha':fecha,'venta':venta}})
         return redirect(url_for("e_ventas"))  
     return render_template('admin/e_ventas.html')
 

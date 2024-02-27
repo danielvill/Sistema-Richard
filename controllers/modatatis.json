@@ -4,7 +4,6 @@
         "password": "admin"
     },
     "usuario":{
-        "id":1,
         "usuario": "Maria",
         "cedula": 54548785,
         "codigo":"Maria45",

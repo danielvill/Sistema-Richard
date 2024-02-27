@@ -1,8 +1,9 @@
 {% extends "admin/layout.html" %}
 {% block content %}
+
 <div class="container">
-    <div class="">
-        <table class="table">
+    <div>
+        <table id="myTable" class="table">
             <thead>
                 <tr>
                     <th>Empleado</th>
@@ -14,19 +15,18 @@
             </thead>
             <tbody>
                 {% for r_asistencia in asistencia %}
-                <form action="/edit_asi/{{r_asistencia.empleado}}" method="post">
                     <tr>
                         <td>
-                            <input type="text" name="empleado" value="{{r_asistencia.empleado}}">
+                            {{r_asistencia.empleado}}
                         </td>
                         <td>
-                            <input type="date" name="fecha" value="{{r_asistencia.fecha}}">
+                            {{r_asistencia.fecha}}
                         </td>
                         <td>
-                            <input type="time" name="hora" value="{{r_asistencia.hora}}">
+                            {{r_asistencia.hora}}
                         </td>
                         <td>
-                            <input type="text" name="comentario" value="{{r_asistencia.comentario}}">
+                            {{r_asistencia.comentario}}
                         </td>
                         <td>
                             <button class="editar" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16"
@@ -44,21 +44,79 @@
                                 </svg></a>
                         </td>
                     </tr>
-                </form>
                 {% endfor %}
             </tbody>
         </table>
-
     </div>
 </div>
+<div id="editModal" title="Editar Empleado">
+    <form id="editForm" action="" method="post">
+        <label for="">Empleado</label>
+        <input type="text" id="empleado" name="empleado">
+        <label for="">Fecha</label>
+        <input type="date" id="fecha" name="fecha">
+        <label for="">Hora</label>
+        <input type="time" id="hora" name="hora">
+        <label for="password">Comentario</label>
+        <input type="text" id="comentario" name="comentario">
+    </form>
+</div>
 <script>
+    $(document).ready(function () {
+    $('#myTable').DataTable({
+      "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+      }
+    });
+
+    var table = $('#myTable').DataTable();
+
+    //Cambio de english a spanish
+
+
+
+    // Funcionalidad de edición
+    table.on('click', '.editar', function () {
+      var row = $(this).closest('tr');
+      var data = table.row(row).data();
+      // Aquí puedes abrir el modal y llenar los campos del formulario con los datos del usuario
+      // Por ejemplo:
+      $('#empleado').val(data[0]);
+      $('#fecha').val(data[1]);
+      $('#hora').val(data[2]);
+      $('#comentario').val(data[3]);
+      $('#editForm').attr('action', '/edit_asi/' + data[0]);
+      $('#editModal').dialog('open');
+    });
+
+    // Inicializar el modal
+    $('#editModal').dialog({
+      autoOpen: false,
+      modal: true,
+      buttons: [
+        {
+          text: 'Guardar',
+          click: function () {
+            $('#editForm').submit();
+          },
+          // Agregar una clase al botón
+          class: 'guardar'
+        },
+        {
+          text: 'Cancelar',
+          click: function () {
+            $(this).dialog('close');
+          },
+          // Agregar una clase al botón
+          class: 'cancelar'
+        }
+      ]
+    });
+  });
+
     //  Este es oara preguntar de la edicion y eliminacion
     $(document).ready(function () {
-        $(".editar").click(function (event) {
-            if (!confirm("¿Estás seguro de que quieres editar?")) {
-                event.preventDefault();
-            }
-        });
+
 
         $(".eliminar").click(function (event) {
             if (!confirm("¿Estás seguro de que quieres eliminar?")) {
@@ -67,7 +125,4 @@
         });
     });
 </script>
-
-
-
 {% endblock %}

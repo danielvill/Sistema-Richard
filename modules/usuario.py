@@ -1,6 +1,6 @@
 class Usuario:
-    def __init__(self,id,usuario,cedula,correo,password):
-        self.id = id
+    def __init__(self,usuario,cedula,correo,password):
+        
         self.usuario = usuario
         self.cedula = cedula
         self.correo = correo
@@ -8,7 +8,6 @@ class Usuario:
         
     def usuDBCollection(self):
         return{
-            'id':self.id,
             'usuario':self.usuario,
             'cedula':self.cedula,
             'correo':self.correo,

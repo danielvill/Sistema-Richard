@@ -1,48 +1,109 @@
 {% extends "admin/layout.html" %}
 {% block content %}
+
 <div class="container">
-  {% for visusuarios in usuario %}
-  <div class="">
-    <form action="/edit_cli/{{visusuarios.usuario}}" method="post">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Usuario</th>
-            <th>Cédula</th>
-            <th>Correo</th>
-            <th>Contraseña</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><input type="text" name="usuario" value="{{visusuarios.usuario}}"></td>
-            <td><input type="number" name="cedula" value="{{visusuarios.cedula}}"></td>
-            <td><input type="email" name="correo" value="{{visusuarios.correo}}"></td>
-            <td><input type="text" name="password" value="{{visusuarios.password}}"></td>
-            <td>
-              <button class="editar" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                  fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                  <path
-                    d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                  <path fill-rule="evenodd"
-                    d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-                </svg></button>
+  <table id="myTable" class="table">
+    <thead>
+      <tr>
+        <th>Usuario</th>
+        <th>Cédula</th>
+        <th>Correo</th>
+        <th>Contraseña</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for visusuarios in usuario %}
+      <tr>
+        <td>{{visusuarios.usuario}}</td>
+        <td>{{visusuarios.cedula}}</td>
+        <td>{{visusuarios.correo}}</td>
+        <td>{{visusuarios.password}}</td>
+        <td>
+          <button class="editar" data-usuario="{{visusuarios.usuario}}"><svg xmlns="http://www.w3.org/2000/svg"
+              width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+              <path
+                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+              <path fill-rule="evenodd"
+                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+            </svg></button>
+          <a class="eliminar" href="{{url_for('elimiusu',usu_name=visusuarios.usuario)}}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="" height="16" fill="currentColor" class="bi bi-trash-fill"
+              viewBox="0 0 16 16">
+              <path
+                d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+            </svg>
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
-              <a class="eliminar" href="{{url_for('elimiusu',usu_name=visusuarios.usuario)}}"><svg
-                  xmlns="http://www.w3.org/2000/svg" width="" height="16" fill="currentColor" class="bi bi-trash-fill"
-                  viewBox="0 0 16 16">
-                  <path
-                    d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
-                </svg></a>
-
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  <div id="editModal" title="Editar Usuario">
+    <form id="editForm" action="" method="post">
+      <label for="usuario">Usuario</label>
+      <input type="text" id="usuario" name="usuario">
+      <label for="cedula">Cédula</label>
+      <input type="number" id="cedula" name="cedula">
+      <label for="correo">Correo</label>
+      <input type="email" id="correo" name="correo">
+      <label for="password">Contraseña</label>
+      <input type="text" id="password" name="password">
     </form>
   </div>
-  {% endfor %}
 </div>
-<script src="/static/js/admin/vis_usua.js"></script>
+<script>
+  $(document).ready(function () {
+    $('#myTable').DataTable({
+      "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+      }
+    });
+
+    var table = $('#myTable').DataTable();
+
+    //Cambio de english a spanish
+
+
+
+    // Funcionalidad de edición
+    table.on('click', '.editar', function () {
+      var row = $(this).closest('tr');
+      var data = table.row(row).data();
+      // Aquí puedes abrir el modal y llenar los campos del formulario con los datos del usuario
+      // Por ejemplo:
+      $('#usuario').val(data[0]);
+      $('#cedula').val(data[1]);
+      $('#correo').val(data[2]);
+      $('#password').val(data[3]);
+      $('#editForm').attr('action', '/edit_cli/' + data[0]);
+      $('#editModal').dialog('open');
+    });
+
+    // Inicializar el modal
+    $('#editModal').dialog({
+      autoOpen: false,
+      modal: true,
+      buttons: [
+        {
+          text: 'Guardar',
+          click: function () {
+            $('#editForm').submit();
+          },
+          // Agregar una clase al botón
+          class: 'guardar'
+        },
+        {
+          text: 'Cancelar',
+          click: function () {
+            $(this).dialog('close');
+          },
+          // Agregar una clase al botón
+          class: 'cancelar'
+        }
+      ]
+    });
+  });
+</script>
 {% endblock %}
