@@ -30,7 +30,7 @@ def index():
             return redirect(url_for('registrar'))
         elif usuario_found2:
             session['usuario'] = usuari
-            return redirect(url_for('u_usuario'))
+            return redirect(url_for('u_asistencia'))
         else:
             flash('Usuario o contraseña incorrectas')
             return redirect(url_for('index'))
@@ -41,22 +41,27 @@ def index():
 #Admin Funcion de Registrar Usuario
 @app.route('/admin/usuario',methods=['GET','POST'])
 def registrar():
-    if request.method =='POST':
-        registro = db["usuario"]
-        usuari = request.form['usuario']
-        cedula = request.form['cedula']
-        correo = request.form['correo']
-        password = request.form['password']
-        if usuari and cedula and correo and password:
-            regis = Usuario(usuari,cedula,correo,password)
-            registro.insert_one(regis.usuDBCollection())
-            flash('Guardado en la base de datos')
-            return redirect(url_for('registrar'))
+    if 'usuario' in session and session['usuario'] == 'admin':  # Comprobamos si el usuario ha iniciado sesión
+        if request.method == 'POST':
+            registro = db["usuario"]
+            usuari = request.form['usuario']
+            cedula = request.form['cedula']
+            correo = request.form['correo']
+            password = request.form['password']
+            if usuari and cedula and correo and password:
+                regis = Usuario(usuari, cedula, correo, password)
+                registro.insert_one(regis.usuDBCollection())
+                print("No hay nada")
+                flash('Guardado en la base de datos')
+                return redirect(url_for('registrar'))
+            else:
+                flash('Llena todos los campos')
+                return redirect(url_for('registrar'))
         else:
-            flash('Llena todos los campos')
-            return redirect(url_for('registrar'))	
+            return render_template('admin/usuario.html')
     else:
-        return render_template('admin/usuario.html')
+        flash('Debes iniciar sesión para ver esta página.')
+        return redirect(url_for('index'))  # Redirigimos al usuario a la página de inicio de sesión si no ha iniciado sesión
 
 #Admin Vista Usuario
 
@@ -441,7 +446,7 @@ def usve():
     return [usuario['usuario'] for usuario in usuarios]
 
 
-#Usuario Asistencia
+# * Usuario Asistencia
 @app.route('/usuario/asistencia', methods=['GET', 'POST'])
 def u_asistencia():
     if 'usuario' in session:
@@ -462,7 +467,7 @@ def u_asistencia():
     else:
         return redirect(url_for('index'))
 
-#Usuario Tareas
+# * Usuario Tareas
 @app.route('/usuario/v_tarea',methods=['GET','POST'])
 def u_tareas():
     asistencia =db['asistencia'].find()

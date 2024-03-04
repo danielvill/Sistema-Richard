@@ -11,7 +11,7 @@
             <input type="text" name="empleado" value="{{ usuario }}" readonly>
             <input type="date" id="fecha" name="fecha" placeholder="Fecha">
             <br>
-            <input type="text" id="hora" name="hora">
+            <input type="text" id="hora" name="hora" readonly>
             <br>
             <select name="comentario" id="">
                 <option >Ingreso</option>
@@ -34,8 +34,30 @@
             {% endwith %}
     </div>
 </div>
+<script>
+    // Selecciona el campo de fecha
+var campoFecha = document.getElementById('fecha');
 
+// Escucha el evento 'change'
+campoFecha.addEventListener('change', function() {
+    // Obtiene la hora actual
+    var fechaActual = new Date();
+    var hora = fechaActual.getHours();
+    var minutos = fechaActual.getMinutes();
 
+    // Asegúrate de que las horas y los minutos sean de dos dígitos
+    hora = hora < 10 ? '0' + hora : hora;
+    minutos = minutos < 10 ? '0' + minutos : minutos;
+
+    // Formatea la hora como HH:MM
+    var horaFormateada = hora + ':' + minutos;
+
+    // Establece la hora en el campo de hora
+    var campoHora = document.getElementById('hora');
+    campoHora.value = horaFormateada;
+});
+
+</script>
 <script src="/static/js/user/asistencia.js">
 </script>
 

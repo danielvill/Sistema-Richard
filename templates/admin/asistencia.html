@@ -20,7 +20,7 @@
                     </select>
                     <input type="date"  name="fecha" placeholder="Fecha">
                     <br>
-                    <input type="text" id="hora" name="hora">
+                    <input type="time" id="hora" name="hora">
                     <br>
                     <select name="comentario" id="">
                         <option>Ingreso</option>
@@ -52,17 +52,7 @@
     $(document).ready(function () {
         $('select').select2();
     });
-    document.getElementById('hora').addEventListener('change', function() {
-    var hora = this.value;
-    var horarioLaboral = ['08:00', '12:00', '14:00', '18:00'];
-
-    if (horarioLaboral.includes(hora)) {
-        console.log('Hora laborable');
-    } else {
-        alert('Esa no es una hora laborable solo se acepta este formato de hora 08:00,12:00,14:00,18:00' );
-        this.value = '';  // Borra el valor del campo de entrada
-    }
-});
+    
 </script>
 
 {% endblock %}

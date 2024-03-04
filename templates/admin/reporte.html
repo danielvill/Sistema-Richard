@@ -1,6 +1,7 @@
 {% extends "admin/layout.html" %}
 {% block content %}
 <div class="container">
+    <h1 style="text-align: center;">Ventas Anuales</h1>
     <div class="tarea">
         <table id="example" class="display" style="width:100%">
             <thead>
@@ -13,14 +14,14 @@
                 {% for fecha in fechas %}
                 <tr>
                     <td>{{ fecha }}</td>
-                    <td>Total: {{ sumas[fecha] }}</td>
+                    <td>{{ sumas[fecha] }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+    <canvas id="myBarChart"></canvas>
 </div>
-<canvas id="myBarChart"></canvas>
 
 <script>
     //Cambio de english a spanish

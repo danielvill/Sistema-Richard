@@ -1,35 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Ingreso de sistema</title>
   <link rel="stylesheet" href="/static/css/body.css">
 </head>
-
 <body>
-
   <div class="login-container">
     <form action="/index" method="POST">
+      <img src="/static/img/tatis.jpeg" alt="" class="imagen">
+      <label for="uname"><b>Nombre de usuario</b></label>
+      <input type="text" placeholder="Introduce tu nombre de usuario" name="usuario" required>
 
-    
-    <img src="/static/img/tatis.jpeg" alt="" class="imagen">
-    <label for="uname"><b>Nombre de usuario</b></label>
-    <input type="text" placeholder="Introduce tu nombre de usuario" name="usuario" required>
-
-    <label for="psw"><b>Contraseña</b></label>
-    <input type="password" placeholder="Introduce tu contraseña" name="password" required>
-    <button type="submit">Iniciar sesión</button>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <div class="alert alert-danger" role="alert">
-      {{ messages[0] }}
-    </div>
-    {% endif %}
-    {% endwith %}
-  </form>
+      <label for="psw"><b>Contraseña</b></label>
+      <input type="password" placeholder="Introduce tu contraseña" name="password" required>
+      <button type="submit">Iniciar sesión</button>
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      <div class="alert alert-danger" role="alert">
+        {{ messages[0] }}
+      </div>
+      {% endif %}
+      {% endwith %}
+    </form>
   </div>
 </body>
-
 </html>
