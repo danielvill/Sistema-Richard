@@ -28,7 +28,7 @@ select
     /* Color de fondo gris claro para los campos de entrada */
 }
 
-button {
+.enviar {
     background-color: #FFC0CB;
     /* Color de fondo rosa para el botón */
     color: black;

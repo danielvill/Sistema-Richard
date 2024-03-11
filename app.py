@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from collections import defaultdict
 from babel.dates import format_date #pip install babel
 
+
 db = dbase()
 
 app = Flask(__name__)
@@ -18,6 +19,13 @@ app.secret_key = 'modatatis'
 def principal():
     return render_template('index.html')
 
+@app.route('/logout')
+def logout():
+    # Elimina el usuario de la sesión si está presente
+    session.pop('username', None)
+    return redirect(url_for('index'))
+
+
 @app.route('/index',methods=['GET','POST'])
 def index():
     if request.method =='POST':
@@ -26,9 +34,11 @@ def index():
         usuario_found = db.admin.find_one({'usuario':usuari,'password':contra})
         usuario_found2= db.usuario.find_one({'usuario':usuari,'password':contra})#Este modulo es para el usuario para ingresar a la otra pagina 
         if usuario_found:
+            session["username"]= usuario_found["usuario"]
             session['usuario'] = usuari #*Se tiene que importar session para manejar las sesiones de los usuarios
             return redirect(url_for('registrar'))
         elif usuario_found2:
+            session["username"]= usuario_found2["usuario"]
             session['usuario'] = usuari
             return redirect(url_for('u_asistencia'))
         else:
@@ -41,6 +51,10 @@ def index():
 #Admin Funcion de Registrar Usuario
 @app.route('/admin/usuario',methods=['GET','POST'])
 def registrar():
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
+    
     if 'usuario' in session and session['usuario'] == 'admin':  # Comprobamos si el usuario ha iniciado sesión
         if request.method == 'POST':
             registro = db["usuario"]
@@ -67,6 +81,9 @@ def registrar():
 
 @app.route('/admin/vis_usua',methods=['GET','POST'])
 def visusuarios():
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
     usuarios =db['usuario'].find()
     return render_template('admin/vis_usua.html',usuario=usuarios)
 
@@ -93,6 +110,9 @@ def elimiusu(usu_name):
 #Admin Asistencia para ingresar la asistencia select
 @app.route('/admin/asistencia',methods=['GET','POST'])
 def visasi():
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
     if request.method =='POST':
         asistencia = db["asistencia"]
         empleado = request.form['empleado']
@@ -114,6 +134,9 @@ def adasi():
 # Admin labores y Select 
 @app.route('/admin/labores',methods=['GET','POST'])
 def labores():
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
     if request.method =='POST':
         labor = db["labores"]
         empleado = request.form['empleado']
@@ -137,6 +160,9 @@ def adla():
 
 @app.route('/admin/reporte',methods=['GET','POST'])
 def reporte():
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
     reportes = list(db.ventas.find())
     fechas_formateadas, sumas_como_cadenas = formatear_fecha(reportes)
     return render_template('admin/reporte.html', ventas=reportes, fechas=fechas_formateadas, sumas=sumas_como_cadenas)
@@ -196,6 +222,9 @@ def formatear_fecha(reportes):
 
 @app.route('/admin/ventas',methods=['GET','POST'])
 def ventas():
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
     if request.method =='POST':
         ventas = db["ventas"]
         vendedor = request.form['vendedor']
@@ -220,6 +249,9 @@ def adve():
 #Admin Editar ventas
 @app.route('/admin/e_ventas',methods=['GET','POST'])
 def e_ventas():
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
     ventas =db['ventas'].find()
     return render_template('admin/e_ventas.html',ventas=ventas)   
 
@@ -250,6 +282,9 @@ def eliven(ven_name):
 #Admin Reporte de ventas
 @app.route('/admin/r_venta',methods=['GET','POST'])
 def reporventa():
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
     # Obtener todas las ventas de la colección 'ventas'
     ventas = db.ventas.find()
 
@@ -282,6 +317,9 @@ def reporventa():
 #Admin reporte diario de ventas
 @app.route('/admin/r_diario')
 def repodia(): 
+        if 'username' not in session:
+            flash("Inicia sesion con tu usuario y contraseña")
+            return redirect(url_for('index'))     
 
         # Obtener todas las ventas de la colección 'ventas'
         ventas = db.ventas.find()
@@ -319,7 +357,9 @@ def repodia():
 # Admin Ventas semanales 
 @app.route('/admin/r_semanal')
 def reposemana(): 
-
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
     # Obtener todas las ventas de la colección 'ventas'
     ventas = db.ventas.find()
     
@@ -359,6 +399,9 @@ def reposemana():
 
 @app.route('/admin/tareas',methods=['GET','POST'])
 def tareas():
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
     asistencia =db['asistencia'].find()
     labores =db['labores'].find()
     return render_template('admin/tareas.html',asistencia=asistencia,labores=labores)   
@@ -368,6 +411,9 @@ def tareas():
 
 @app.route('/admin/vi_labores',methods=['GET','POST'])
 def vi_labores():
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
     labores = db['labores'].find()
     return render_template('admin/vi_labores.html',labores=labores)
     
@@ -393,6 +439,9 @@ def elilab(lab_name):
 #Admin editar asistencia  
 @app.route('/admin/vis_asistencia',methods=['GET','POST'])
 def r_asistencia():
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
     asistencia = db['asistencia'].find()
     return render_template('admin/vis_asistencia.html',asistencia=asistencia)
 
@@ -422,6 +471,9 @@ def eliasi(asi_name):
 
 @app.route('/usuario/venta',methods=['GET','POST'])
 def u_usuario():
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
     if 'usuario' in session:
         if request.method =='POST':
             ventas = db["ventas"]
@@ -449,6 +501,9 @@ def usve():
 # * Usuario Asistencia
 @app.route('/usuario/asistencia', methods=['GET', 'POST'])
 def u_asistencia():
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
     if 'usuario' in session:
         if request.method == 'POST':
             asistencia = db["asistencia"]
@@ -470,6 +525,9 @@ def u_asistencia():
 # * Usuario Tareas
 @app.route('/usuario/v_tarea',methods=['GET','POST'])
 def u_tareas():
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
     asistencia =db['asistencia'].find()
     labores =db['labores'].find()
     return render_template('usuario/v_tarea.html',asistencia=asistencia,labores=labores)   

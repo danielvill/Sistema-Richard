@@ -17,7 +17,7 @@
             <tr>
                 <td>{{ usuario }}</td>
                 <td>{{ semana }}</td>
-                <td >{{ cantidad }}</td>
+                <td>{{ cantidad }}</td>
             </tr>
             {% endfor %}
             {% endfor %}
@@ -36,42 +36,71 @@
         });
     });
 
-    // Datos de ejemplo (reemplázalos con tus propios datos)
-    const usuarios = [{% for usuario, ventas in usuarios_ordenados %}"{{ usuario }}", {% endfor %}];
-        const semanas = [{% for usuario, ventas in usuarios_ordenados %}{% for semana, cantidad in ventas.items() %}"{{ semana }}", {% endfor %}{% endfor %}];
-        const cantidades = {
-            {% for usuario, ventas in usuarios_ordenados %}
-                {% for semana, cantidad in ventas.items() %}
-                    "{{ usuario }}-{{ semana }}": {{ cantidad }},
-                {% endfor %}
-            {% endfor %}
-        };
+    const vendedores = [];
+const semanas = [];
+const ventas = [];
 
-        // Configuración del gráfico
-        const config = {
-            type: 'bar',
-            data: {
-                labels: semanas,
-                datasets: usuarios.map(usuario => ({
-                    label: usuario,
-                    data: semanas.map(semana => cantidades[`${usuario}-${semana}`]),
-                    backgroundColor: 'rgba(40,44,45)', // Color de las barras
-                    borderColor: 'rgba(75, 192, 192, 1)', // Color del borde de las barras
-                    borderWidth: 1 // Grosor del borde
-                }))
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        };
+// Recorrer las filas de la tabla
+$("#example tbody tr").each(function() {
+  // Obtener el nombre del vendedor
+  const vendedor = $(this).find("td:first").text();
+  vendedores.push(vendedor);
 
-        // Crear el gráfico
-        const ctx = document.getElementById('myBarChart').getContext('2d');
-        new Chart(ctx, config);
+  // Obtener la semana
+  const semana = $(this).find("td:nth-child(2)").text();
+  semanas.push(semana);
+
+  // Obtener la cantidad de ventas
+  const cantidad = parseInt($(this).find("td:last").text());
+  ventas.push(cantidad);
+});
+
+const ctx = document.getElementById("myBarChart").getContext("2d");
+
+const myBarChart = new Chart(ctx, {
+  type: "bar",
+  data: {
+    labels: semanas,
+    datasets: [
+      {
+        label: "Ventas por vendedor",
+        data: ventas,
+        backgroundColor: [
+          "rgba(255, 99, 132, 0.5)",
+          "rgba(54, 162, 235, 0.5)",
+          "rgba(255, 206, 86, 0.5)",
+          "rgba(75, 192, 192, 0.5)",
+          "rgba(153, 102, 255, 0.5)",
+          "rgba(255, 159, 64, 0.5)",
+        ],
+        borderColor: [
+          "rgba(255, 99, 132, 1)",
+          "rgba(54, 162, 235, 1)",
+          "rgba(255, 206, 86, 1)",
+          "rgba(75, 192, 192, 1)",
+          "rgba(153, 102, 255, 1)",
+          "rgba(255, 159, 64, 1)",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  },
+  options: {
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            beginAtZero: true,
+          },
+        },
+      ],
+    },
+    title: {
+      display: true,
+      text: "Ventas Semanales",
+    },
+  },
+});
 </script>
 
 
