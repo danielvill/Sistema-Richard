@@ -36,7 +36,7 @@ def index():
         if usuario_found:
             session["username"]= usuario_found["usuario"]
             session['usuario'] = usuari #*Se tiene que importar session para manejar las sesiones de los usuarios
-            return redirect(url_for('registrar'))
+            return redirect(url_for('home'))
         elif usuario_found2:
             session["username"]= usuario_found2["usuario"]
             session['usuario'] = usuari
@@ -76,6 +76,13 @@ def registrar():
     else:
         flash('Debes iniciar sesión para ver esta página.')
         return redirect(url_for('index'))  # Redirigimos al usuario a la página de inicio de sesión si no ha iniciado sesión
+
+# Admin HOME
+@app.route('/admin/home',methods=['GET','POST'])
+def home():
+    return render_template('admin/home.html')   
+
+
 
 #Admin Vista Usuario
 
@@ -468,6 +475,11 @@ def eliasi(asi_name):
 
 
 #  ------------------- Carpeta Usuario ------------------------------------------------------------
+@app.route('/usuario/home',methods=['GET','POST'])
+def u_home():
+    return render_template("usuario/home.html")
+
+
 
 @app.route('/usuario/venta',methods=['GET','POST'])
 def u_usuario():

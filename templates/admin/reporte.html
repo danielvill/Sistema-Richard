@@ -2,27 +2,30 @@
 {% block content %}
 <div class="container">
     <div class="tarea">
-        
-            <table id="example" class="display" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Fecha</th>
-                        <th>Valor</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for fecha in fechas %}
-                    <tr>
-                        <td>{{ fecha }}</td>
-                        <td>{{ sumas[fecha] }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        
+
+        <table id="example" class="display" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for fecha in fechas %}
+                <tr>
+                    <td>{{ fecha }}</td>
+                    <td>{{ sumas[fecha] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
     </div>
-    <canvas id="myBarChart"></canvas>
+    <div  style="background-color: white;">
+        <canvas id="myBarChart"></canvas>
+    </div>
 </div>
+
 
 <script>
     //Cambio de english a spanish
