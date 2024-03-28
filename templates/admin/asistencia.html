@@ -5,7 +5,7 @@
 <div class="container">
     <div class="row">
         <div class="col align-self-center">
-            <img src="/static/img/1.jpeg" class="img-fluid">
+            <img src="/static/img/FIG-7-IZQ.png" class="img-fluid">
         </div>
         <div class="col-sm">
             <div class="tatis">
@@ -23,12 +23,16 @@
                     <input type="time" id="hora" name="hora">
                     <br>
                     <select name="comentario" id="">
-                        <option>Ingreso</option>
-                        <option>Almuerzo</option>
-                        <option>Salida</option>
+                        <option value="Ingreso">Ingreso</option>
+                        <option value="Salida">Salida</option>
                     </select>
                     <br>
                     <br>
+                    <select name="estado" id="">
+                        <option value="Temprano">Temprano</option>
+                        <option value="Tarde">Tarde</option>
+                        <option value="Hora Extra">Horas Extra</option>
+                    </select>
                     <button class="enviar">Enviar</button>
                 </form>
                 <br>
@@ -44,7 +48,7 @@
             </div>
         </div>
         <div class="col align-self-center">
-            <img src="/static/img/2.jpeg" class="img-fluid">
+            <img src="/static/img/FIG-8-DER.png" class="img-fluid">
         </div>
     </div>
 </div>
@@ -52,7 +56,5 @@
     $(document).ready(function () {
         $('select').select2();
     });
-    
 </script>
-
 {% endblock %}

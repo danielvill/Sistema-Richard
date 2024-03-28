@@ -1,7 +1,5 @@
 {% extends "usuario/layout.html" %}
-
 {% block content %}
-
 <div class="container">
     <div class="tatis">
         <form action="/usuario/asistencia" method="POST">
@@ -13,49 +11,95 @@
             <br>
             <input type="text" id="hora" name="hora" readonly>
             <br>
-            <select name="comentario" id="">
-                <option >Ingreso</option>
-                <option >Salida</option>
-            </select>
+            <input type="text" id="estado" name="estado" readonly>
+            <br>
+            <input type="text" id="comentario" name="comentario" readonly>
             <br>
             <br>
-            <button class="enviar">Enviar</button>           
+            <button class="enviar">Enviar</button>
         </form>
         <br>
         {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <div class="container">
-                {% for message in messages %}
-                <h5 style="background-color:#FFC0CB;">{{ message }}</h5>
-                {% endfor %}
-            </div>
-            {% endif %}
-            {% endwith %}
+        {% if messages %}
+        <div class="container">
+            {% for message in messages %}
+            <h5 style="background-color:#FFC0CB;">{{ message }}</h5>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
     </div>
 </div>
 <script>
     // Selecciona el campo de fecha
-var campoFecha = document.getElementById('fecha');
+    var campoFecha = document.getElementById('fecha');
 
-// Escucha el evento 'change'
-campoFecha.addEventListener('change', function() {
-    // Obtiene la hora actual
-    var fechaActual = new Date();
-    var hora = fechaActual.getHours();
-    var minutos = fechaActual.getMinutes();
+    // Escucha el evento 'change'
+    campoFecha.addEventListener('change', function () {
+        // Obtiene la hora actual
+        var fechaActual = new Date();
+        var hora = fechaActual.getHours();
+        var minutos = fechaActual.getMinutes();
 
-    // Asegúrate de que las horas y los minutos sean de dos dígitos
-    hora = hora < 10 ? '0' + hora : hora;
-    minutos = minutos < 10 ? '0' + minutos : minutos;
+        // Asegúrate de que las horas y los minutos sean de dos dígitos
+        hora = hora < 10 ? '0' + hora : hora;
+        minutos = minutos < 10 ? '0' + minutos : minutos;
 
-    // Formatea la hora como HH:MM
-    var horaFormateada = hora + ':' + minutos;
+        // Formatea la hora como HH:MM
+        var horaFormateada = hora + ':' + minutos;
 
-    // Establece la hora en el campo de hora
-    var campoHora = document.getElementById('hora');
-    campoHora.value = horaFormateada;
-});
+        // Establece la hora en el campo de hora
+        var campoHora = document.getElementById('hora');
+        campoHora.value = horaFormateada;
 
+        // Selecciona el campo de comentario
+        var campoComentario = document.getElementById('comentario');
+        
+
+        // Comprueba la hora y establece el valor del campo de comentarios
+        if (horaFormateada >= '18:00') {
+            campoComentario.value = 'Horas Extras';
+        } else if (horaFormateada >= '08:31') {
+            campoComentario.value = 'Tarde';
+        } else {
+            campoComentario.value = 'Temprano';
+        }
+    });
+
+</script>
+<script>
+    // Selecciona el campo de fecha
+    var campoFecha = document.getElementById('fecha');
+
+    // Escucha el evento 'change'
+    campoFecha.addEventListener('change', function () {
+        // Obtiene la hora actual
+        var fechaActual = new Date();
+        var hora = fechaActual.getHours();
+        var minutos = fechaActual.getMinutes();
+
+        // Asegúrate de que las horas y los minutos sean de dos dígitos
+        hora = hora < 10 ? '0' + hora : hora;
+        minutos = minutos < 10 ? '0' + minutos : minutos;
+
+        // Formatea la hora como HH:MM
+        var horaFormateada = hora + ':' + minutos;
+
+        // Establece la hora en el campo de hora
+        var campoHora = document.getElementById('hora');
+        campoHora.value = horaFormateada;
+
+        // Selecciona el campo de comentario
+        var campoComentario = document.getElementById('estado');
+        
+
+        // Comprueba la hora y establece el valor del campo de comentarios
+        if (horaFormateada >= '18:00') {
+            campoComentario.value = 'Salida';
+        } else if (horaFormateada >= '08:31') {
+            campoComentario.value = 'Ingreso';
+        } 
+    });
 </script>
 <script src="/static/js/user/asistencia.js">
 </script>

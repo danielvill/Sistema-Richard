@@ -1,4 +1,4 @@
-    
+
 // Validar lo que es la cedula 
 function validarCedula(cedula) {
     // Verifica que tenga 10 caracteres y sea solo números
@@ -18,6 +18,26 @@ function validarCedula(cedula) {
     }
 }
 
+
+// Validacion si los campos estan vacios
+document.querySelector('form').onsubmit = function (e) {
+    var inputs = this.querySelectorAll('input');
+    var todosLlenos = true; // Asume que todos los campos están llenos
+
+    for (var i = 0; i < inputs.length; i++) {
+        if (inputs[i].value === '') {
+            todosLlenos = false; // Si un campo está vacío, establece todosLlenos en falso
+            break; // No necesitas verificar el resto de los campos, así que puedes salir del bucle
+        }
+    }
+
+    if (!todosLlenos) {
+        e.preventDefault(); // Previene el envío del formulario
+        alert('Los campos estan vacios');
+    }
+};
+
+
 document.querySelector('form').addEventListener('submit', function (e) {
     var cedula = document.querySelector('input[name="cedula"]').value;
     if (!validarCedula(cedula)) {
@@ -34,18 +54,17 @@ function validarcorreo() {
         return false;
     }
 }
-    // Validación de la longitud de la cédula
-    document.getElementById('miInput').onchange = function () {
-        if (this.value.length !== 10) {
-            alert('Necesita 10 dígitos la cedula');
-            this.value = '';
-        }
+// Validación de la longitud de la cédula
+document.getElementById('miInput').onchange = function () {
+    if (this.value.length !== 10) {
+        alert('Necesita 10 dígitos la cedula');
+        this.value = '';
     }
-    function limitarEntrada() {
-        let x = document.getElementById("miInput");
-        if (x.value.length > 10) {
-            x.value = x.value.slice(0, 10);
-        }
+}
+function limitarEntrada() {
+    let x = document.getElementById("miInput");
+    if (x.value.length > 10) {
+        x.value = x.value.slice(0, 10);
     }
+}
 
-    

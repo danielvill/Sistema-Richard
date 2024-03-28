@@ -62,14 +62,21 @@ def registrar():
             cedula = request.form['cedula']
             correo = request.form['correo']
             password = request.form['password']
-            if usuari and cedula and correo and password:
-                regis = Usuario(usuari, cedula, correo, password)
-                registro.insert_one(regis.usuDBCollection())
-                print("No hay nada")
-                flash('Guardado en la base de datos')
+            
+            existing_usuario =  registro.find_one({"usuario": usuari})
+            existing_cedula = registro.find_one({"cedula": cedula})
+
+            if existing_usuario:
+                flash("Ya existe un usuario con estos datos.")
+                return redirect(url_for('registrar'))
+            
+            elif existing_cedula:
+                flash("Ya existe una cedula con estos datos.")
                 return redirect(url_for('registrar'))
             else:
-                flash('Llena todos los campos')
+                regis = Usuario(usuari, cedula, correo, password)
+                registro.insert_one(regis.usuDBCollection())
+                flash('Guardado en la base de datos')
                 return redirect(url_for('registrar'))
         else:
             return render_template('admin/usuario.html')
@@ -82,10 +89,7 @@ def registrar():
 def home():
     return render_template('admin/home.html')   
 
-
-
 #Admin Vista Usuario
-
 @app.route('/admin/vis_usua',methods=['GET','POST'])
 def visusuarios():
     if 'username' not in session:
@@ -126,8 +130,9 @@ def visasi():
         fecha = request.form['fecha']
         horas = request.form['hora']
         comentarios = request.form["comentario"]
-        if empleado and fecha and horas and comentarios:
-            asi = Asistencia(empleado,fecha,horas,comentarios)
+        estado = request.form['estado']
+        if empleado and fecha and horas and comentarios and estado:
+            asi = Asistencia(empleado,fecha,horas,comentarios,estado)
             asistencia.insert_one(asi.asisDBCollection())
             flash('Guardado exitosamente')
             return redirect(url_for('visasi'))
@@ -135,9 +140,12 @@ def visasi():
             flash('Llena todos los campos')
         
     return render_template('admin/asistencia.html',usuario=adasi())
+
+
 def adasi():
     usuarios = db.usuario.find({}, {"usuario": 1})
     return [usuario['usuario'] for usuario in usuarios]
+
 # Admin labores y Select 
 @app.route('/admin/labores',methods=['GET','POST'])
 def labores():
@@ -148,7 +156,7 @@ def labores():
         labor = db["labores"]
         empleado = request.form['empleado']
         fecha = request.form['fecha']
-        descripcion = request.form['descripcion']
+        descripcion = ', '.join(request.form.getlist('descripcion')) # Este codigo permite seleccionar todos los chetbox y comvertirlos en una cadena de texto
         if  empleado and fecha and descripcion:
             lal= Labores(empleado,fecha,descripcion)
             labor.insert_one(lal.laboDBCollection())
@@ -164,7 +172,6 @@ def adla():
     return [usuario['usuario'] for usuario in usuarios]
 
 #Admin reporte
-
 @app.route('/admin/reporte',methods=['GET','POST'])
 def reporte():
     if 'username' not in session:
@@ -223,10 +230,7 @@ def formatear_fecha(reportes):
 
     return fechas_formateadas, sumas
 
-
-
 #Admin ventas y funcion para el Select
-
 @app.route('/admin/ventas',methods=['GET','POST'])
 def ventas():
     if 'username' not in session:
@@ -283,8 +287,6 @@ def eliven(ven_name):
     vendedor =db['ventas']
     vendedor.delete_one({'vendedor':ven_name})
     return redirect(url_for('e_ventas'))
-
-
 
 #Admin Reporte de ventas
 @app.route('/admin/r_venta',methods=['GET','POST'])
@@ -403,7 +405,6 @@ def reposemana():
     return render_template('admin/r_semanal.html', usuarios_ordenados=usuarios_ordenados)
 
 #Admin  Tareas 
-
 @app.route('/admin/tareas',methods=['GET','POST'])
 def tareas():
     if 'username' not in session:
@@ -415,7 +416,6 @@ def tareas():
 
 
 #Admin  vista y elimincacion y editacion de labores 
-
 @app.route('/admin/vi_labores',methods=['GET','POST'])
 def vi_labores():
     if 'username' not in session:
@@ -459,8 +459,10 @@ def ediasi(asi_name):
     fecha = request.form['fecha']
     hora = request.form["hora"]
     comentarios = request.form["comentario"]
-    if empleado and fecha and hora and comentarios:
-        asistencia.update_one({'empleado':asi_name},{'$set':{'empleado':empleado,'fecha':fecha,'hora':hora,'comentario':comentarios}})
+    estado = request.form["estado"]
+    
+    if empleado and fecha and hora and comentarios and estado :
+        asistencia.update_one({'empleado':asi_name},{'$set':{'empleado':empleado,'fecha':fecha,'hora':hora,'comentario':comentarios ,'estado':estado}})
         return redirect(url_for("r_asistencia"))
 
 
@@ -522,9 +524,10 @@ def u_asistencia():
             empleado = request.form['empleado']
             fecha = request.form['fecha']
             horas = request.form['hora']
+            estado = request.form['estado']
             comentarios = request.form["comentario"]
-            if empleado and fecha and horas and comentarios:
-                asi = Asistencia(empleado, fecha, horas, comentarios)
+            if empleado and fecha and horas and estado and comentarios:
+                asi = Asistencia(empleado, fecha,horas,estado, comentarios)
                 asistencia.insert_one(asi.asisDBCollection())
                 flash('Guardado exitosamente')
                 return redirect(url_for('u_asistencia'))
