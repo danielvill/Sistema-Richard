@@ -7,7 +7,7 @@
             <label for="uname"><b>Ingresado de Asistencia</b></label>
             <br>
             <input type="text" name="empleado" value="{{ usuario }}" readonly>
-            <input type="date" id="fecha" name="fecha" placeholder="Fecha">
+            <input type="date" id="fecha" name="fecha" placeholder="Fecha" required>
             <br>
             <input type="text" id="hora" name="hora" readonly>
             <br>
@@ -103,5 +103,4 @@
 </script>
 <script src="/static/js/user/asistencia.js">
 </script>
-
 {% endblock %}

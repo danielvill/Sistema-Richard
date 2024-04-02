@@ -18,25 +18,28 @@
                     </select>
                     <br>
                     <br>
-                    <select name="categoria" id="">
-                        <option value="Jeans de mujer">Jeans de mujer</option>
-                        <option value="Camisa">Camisa</option>
-                        <option value="Camiseta">Camiseta</option>
-                        <option value="Cardigan">Cardigan</option>
-                        <option value="Blusa">Blusa</option>
-                        <option value="Blusones">Blusones</option>
-                        <option value="Enterisos">Enterisos</option>
-                        <option value="Vestidos">Vestidos</option>
-                        <option value="Shorts">Shorts</option>
-                        <option value="Licra">Licra</option>
-                        <option value="Cartera">Cartera</option>
-                        <option value="Gorra">Gorra</option>
-                        <option value="Zapatos">Zapatos</option>
-                        <option value="Zapatilla">Zapatilla</option>
-                        <option value="Top">Top</option>
-                        <option value="Brasier">Brasier</option>
-                        <option value="Bulto Remate">Bulto Remate</option>
-                    </select>
+                    <div id="categoria">
+                        <select name="categoria" >
+                            <option value="Jeans de mujer">Jeans de mujer</option>
+                            <option value="Camisa">Camisa</option>
+                            <option value="Camiseta">Camiseta</option>
+                            <option value="Cardigan">Cardigan</option>
+                            <option value="Blusa">Blusa</option>
+                            <option value="Blusones">Blusones</option>
+                            <option value="Enterisos">Enterisos</option>
+                            <option value="Vestidos">Vestidos</option>
+                            <option value="Shorts">Shorts</option>
+                            <option value="Licra">Licra</option>
+                            <option value="Cartera">Cartera</option>
+                            <option value="Gorra">Gorra</option>
+                            <option value="Zapatos">Zapatos</option>
+                            <option value="Zapatilla">Zapatilla</option>
+                            <option value="Top">Top</option>
+                            <option value="Brasier">Brasier</option>
+                            <option value="Bulto Remate">Bulto Remate</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn-primary" id="agregarProducto">Agregar producto</button>
                     <br>
                     <br>
                     <input type="number" name="cantidad" placeholder="cantidad">
@@ -67,6 +70,29 @@
 <script>
     $(document).ready(function () {
         $('select').select2();
+    });
+    // Validación para el input de venta
+    document.querySelector('input[name="venta"]').addEventListener('input', function (e) {
+        if (this.value < 0) {
+            alert('No se permiten números negativos');
+            this.value = '';
+        }
+    });
+    // Validación para el input de venta
+    document.querySelector('input[name="cantidad"]').addEventListener('input', function (e) {
+        if (this.value < 0) {
+            alert('No se permiten números negativos');
+            this.value = '';
+        }
+    });
+    // Botón para cambiar el select a un input
+    document.querySelector('#agregarProducto').addEventListener('click', function () {
+        var select = document.querySelector('#categoria');
+        var input = document.createElement('input');
+        input.name = 'categoria';
+        input.placeholder = 'Introduce el nombre del producto';
+        select.parentNode.insertBefore(input, select); // Inserta el input antes del select
+        select.parentNode.removeChild(select); // Elimina el select
     });
 </script>
 {% endblock %}

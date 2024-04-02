@@ -4,9 +4,9 @@
         "password": "admin"
     },
     "usuario":{
+        
         "usuario": "Maria",
         "cedula": 54548785,
-        "codigo":"Maria45",
         "correo": "marco@gmail.com",
         "password": "123"
     },
